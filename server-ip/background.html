@@ -1,0 +1,26 @@
+<script>
+	var cur_url, cur_ip;
+	function parse_url(l_url) {
+		return l_url.replace(/.*?\/\/(.*?)\//,'$1');
+	}
+	function set_badge(ip) {
+		chrome.browserAction.setBadgeText({'text':ip.substr(ip.lastIndexOf('.') + 1)});
+	}
+	chrome.webRequest.onCompleted.addListener(function (d) {
+		if (d.url && d.ip) {
+			cur_url = parse_url(d.url);
+			cur_ip = d.ip;
+			localStorage.setItem(cur_url, cur_ip);
+			set_badge(cur_ip);
+		}
+	}, {'urls' : [], 'types' : ['main_frame']});
+	chrome.tabs.onActiveChanged.addListener(function (tid, sel_info) {
+		chrome.tabs.get(tid, function (ctab) {
+			if (ctab.url.length > 0) {
+				cur_url = parse_url(ctab.url);
+				cur_ip = localStorage.getItem(cur_url) || "...";
+				set_badge(cur_ip);
+			}
+		});
+	});
+</script>

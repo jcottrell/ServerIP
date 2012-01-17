@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Server IP</title>
+	<style>
+		body {
+			font: 12px 'Myriad Pro', 'Tw Cen Mt', Arial;
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		var ip_div = document.createElement('div'),
+			bgPage = chrome.extension.getBackgroundPage(),
+			init = function () {
+				ip_div.innerHTML = bgPage.cur_ip;
+				document.body.appendChild(ip_div);
+			};
+		init();
+	</script>
+</body>
+</html>

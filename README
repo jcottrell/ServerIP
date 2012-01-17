@@ -1,0 +1,3 @@
+Simple chrome extension that gives the IP address of the server being connected to, similar to ShowIP for Firefox. A difference from ShowIP is that Chrome does not leave enough room to automatically show the full IP address. For this reason just the last segment is shown automatically but the full IP address is available by clicking on the icon. No frills, just needed a ShowIP in Chrome.
+
+See license file for MIT License.
