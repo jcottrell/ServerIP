@@ -6,21 +6,31 @@
 	function set_badge(ip) {
 		chrome.browserAction.setBadgeText({'text':ip.substr(ip.lastIndexOf('.') + 1)});
 	}
-	chrome.webRequest.onCompleted.addListener(function (d) {
-		if (d.url && d.ip) {
-			cur_url = parse_url(d.url);
-			cur_ip = d.ip;
-			localStorage.setItem(cur_url, cur_ip);
-			set_badge(cur_ip);
-		}
-	}, {'urls' : [], 'types' : ['main_frame']});
-	chrome.tabs.onActiveChanged.addListener(function (tid, sel_info) {
-		chrome.tabs.get(tid, function (ctab) {
-			if (ctab.url.length > 0) {
-				cur_url = parse_url(ctab.url);
-				cur_ip = localStorage.getItem(cur_url) || "...";
+	if (chrome.webRequest) {
+		chrome.webRequest.onCompleted.addListener(function (d) {
+			if (d.url && d.ip) {
+				cur_url = parse_url(d.url);
+				cur_ip = d.ip;
+				try {
+					localStorage.setItem(cur_url, cur_ip);
+				} catch (e) {
+					// storage full - figure out how to delete 'old' url's
+				}
 				set_badge(cur_ip);
 			}
+		}, {'urls' : [], 'types' : ['main_frame']});
+		chrome.tabs.onActiveChanged.addListener(function (tid, sel_info) {
+			chrome.tabs.get(tid, function (ctab) {
+				if (ctab.url.length > 0) {
+					cur_url = parse_url(ctab.url);
+					cur_ip = localStorage.getItem(cur_url);
+					if (! cur_ip)
+						cur_ip = 'No network traffic yet.';
+					}
+				set_badge(cur_ip);
+			});
 		});
-	});
+	} else {
+		cur_ip = 'This plugin requires at least the <a href="http://dev.chromium.org/getting-involved/dev-channel">Chrome Dev Channel</a> to work.';
+	}
 </script>
