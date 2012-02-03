@@ -1,6 +1,6 @@
 {
   "name": "Server IP",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "View Server IP address",
   "background_page": "background.html",
   "permissions": ["webRequest","<all_urls>","tabs"],
