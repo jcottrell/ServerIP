@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Server IP Options</title>
+	<style>
+		#wrap {width:450px;margin-bottom:10px;}
+		.single-wrap {display:block;padding:10px 20px;}
+		.single-wrap:nth-child(odd) {background-color:#ddd;}
+		.mnem-input {width:65px;}
+		.ip-index-input {width:100px;margin-left:25px;}
+		.single-wrap button {margin-left:10px;}
+		.r-message {margin-left:10px;font-size:small;}
+	</style>
+</head>
+<body>
+	<h2>Server IP Options</h2>
+	<p>Below you can specify the mnemonic or abbreviation that you would like to appear on the ShowIP icon instead of the last three digits of the IP address.</p>
+	<div id="wrap"></div>
+	<button id="add_mnem">&nbsp;+&nbsp;</button>
+	<div>
+		<p>Delete the local storage for all URL, IP combinations. This is harmless, although the extension will 'lose track' of any currently open tabs. It is really only helpful if you think the local storage is getting too large (based on how many different sites you visit).</p>
+		<button id="del_ls">Delete</button>
+	</div>
+	<script src="options.js"></script>
+</body>
+</html>
