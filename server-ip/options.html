@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Server IP Options</title>
 	<style>
+		.outer-wrap {width:600px;padding:10px;margin:0 auto;}
 		#wrap {width:450px;margin-bottom:10px;}
 		.single-wrap {display:block;padding:10px 20px;}
 		.single-wrap:nth-child(odd) {background-color:#ddd;}
@@ -14,13 +15,20 @@
 	</style>
 </head>
 <body>
-	<h2>Server IP Options</h2>
-	<p>Below you can specify the mnemonic or abbreviation that you would like to appear on the ShowIP icon instead of the last three digits of the IP address.</p>
-	<div id="wrap"></div>
-	<button id="add_mnem">&nbsp;+&nbsp;</button>
-	<div>
-		<p>Delete the local storage for all URL, IP combinations. This is harmless, although the extension will 'lose track' of any currently open tabs. It is really only helpful if you think the local storage is getting too large (based on how many different sites you visit).</p>
-		<button id="del_ls">Delete</button>
+	<div class="outer-wrap">
+		<h2>Server IP Options</h2>
+		<div class="mnemonics">
+			<p>Below you can specify the mnemonic or abbreviation that you would like to appear on the ShowIP icon instead of the last three digits of the IP address.</p>
+			<div id="wrap"></div>
+			<button id="add_mnem">&nbsp;+&nbsp;</button>
+		</div>
+		<div class="hover-box">
+			<p for="hb"><input type="checkbox" name="hb" id="hb" value="show_hb" />Checking here will display the entire IP address on the page you are viewing in the upper left/right corner for ease of viewing. Note that at any time the full ip display can be toggled by clicking on the extension button in Chrome, regardless of this setting.</p>
+		</div>
+		<div>
+			<p>Delete the local storage for all URL, IP combinations. This is harmless, although the extension will 'lose track' of any currently open tabs. It is really only helpful if you think the local storage is getting too large (based on how many different sites you visit).</p>
+			<button id="del_ls">Delete</button>
+		</div>
 	</div>
 	<script src="options.js"></script>
 </body>

@@ -1,4 +1,3 @@
-/* TODO - add wildcards, at least * to ip addresses */
 /* Despite the mnemonic being more important to the user, the ip is more important to us since it's the index */
 /* mnems structure:
  * mnems = {
@@ -9,21 +8,36 @@
  *			"mnem" : "lcl"
  *		}
  * }
+ * sips structure = {
+ *		'config_name0' : value,
+ *		'config_name1' : value,
+ *		'config_name2' : 'etc'
+ * }
  */
 (function () {
 	var mnems = JSON.parse(localStorage.getItem('mnems')) || {}, ip_index, more_boxes, mb = 0, mn_len = 0,
+		sips = JSON.parse(localStorage.getItem('sips')) || {},
 		valid_ip = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/,
 		wrap = document.getElementById('wrap'),
 		add_btn = document.getElementById('add_mnem'),
 		rm_btns, rb_i = 0, rb_len,
+		hover_box = document.getElementById('hb'),
 		del_ls_btn = document.getElementById('del_ls');
 
-	function update_mnems() {
+	function update_obj(name, obj) {
 		try {
-			localStorage.setItem('mnems', JSON.stringify(mnems));
+			localStorage.setItem(name, JSON.stringify(obj));
 		} catch (e) {
 			// storage full
 		}
+	}
+
+	function update_mnems() {
+		update_obj('mnems', mnems);
+	}
+
+	function update_sips() {
+		update_obj('sips', sips);
 	}
 
 	function is_valid_pair(ip, mnem) {
@@ -112,14 +126,21 @@
 		return mnem_box_wrap;
 	}
 
+	function get_ip_number_in_ls() {
+		var ls_c = localStorage.length;
+		ls_c -= (localStorage.getItem('mnems') ? 1 : 0);
+		ls_c -= (localStorage.getItem('sips') ? 1 : 0);
+		return ls_c;
+	}
+
 	for (ip_index in mnems) {
 		if (mnems.hasOwnProperty(ip_index)) {
 			mn_len += 1;
 			make_mnem_box(ip_index, mnems[ip_index].mnem);
 		}
 	}
-	// add at least one and at most 4 boxes
-	more_boxes = (mn_len >= 4 ? 1 : 4);
+	// add at least one and at most 4 boxes empty boxed
+	more_boxes = (mn_len >= 4 ? 1 : 4 - mn_len);
 	for (mb = 0; mb < more_boxes; mb += 1) {
 		make_mnem_box('', '');
 	}
@@ -129,16 +150,27 @@
 		make_mnem_box('', '');
 	});
 
-	del_ls_btn.textContent = 'Delete ' + (localStorage.length - 1) + ' items';
+	// set up checkbox to save value of hover_box
+	hover_box.checked = !! (sips && sips.hb);
+	hover_box.addEventListener('click', function (e) {
+		if (this.checked) {
+			sips.hb = true;
+		} else {
+			sips.hb = false;
+		}
+		update_sips();
+	});
+
+	del_ls_btn.textContent = 'Delete ' + get_ip_number_in_ls() + ' items';
 	del_ls_btn.addEventListener('click', function (e) {
 		var ls_i = 0;
 		while (ls_i < localStorage.length ) {
-			if (localStorage.key(ls_i) !== 'mnems') {
+			if ((localStorage.key(ls_i) !== 'mnems') && (localStorage.key(ls_i) !== 'sips')) {
 				localStorage.removeItem(localStorage.key(ls_i));
 			} else {
 				ls_i += 1;
 			}
 		}
-		del_ls_btn.textContent = 'Delete ' + (localStorage.length - 1) + ' items';
+		del_ls_btn.textContent = 'Delete ' + get_ip_number_in_ls() + ' items';
 	});
 }());

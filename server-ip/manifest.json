@@ -1,14 +1,17 @@
 {
   "name": "Server IP",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "View Server IP address or alias",
   "background": { "scripts": ["background.js"] },
   "permissions": ["webRequest","<all_urls>","tabs"],
   "options_page": "options.html",
   "browser_action" : {
 	  "default_title"	: "ServerIP",
-	  "default_icon"	: "icon.png",
-	  "default_popup"	: "popup.html"
+	  "default_icon"	: "icon.png"
   },
+  "content_scripts" :[{
+	  "matches"	: ["<all_urls>"],
+	  "js"		: ["hover-box.js"]
+  }],
   "manifest_version": 2
 }
