@@ -6,6 +6,7 @@ See license file for MIT License.
 
 Change log
 ----------
+2.1.1	Fixed bug that occurred when Hover box was not added to document but attempted to have its text changed
 2.1.0	Added on-page full IP display and option to show it by default or not
 		Changed extension click to toggle on-page full IP display
 		Fixed bug that showed wrong IP when switching from one window to another
