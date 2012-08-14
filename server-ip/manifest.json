@@ -1,6 +1,6 @@
 {
   "name": "Server IP",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "View Server IP address or alias",
   "background": { "scripts": ["background.js"] },
   "permissions": ["webRequest","<all_urls>","tabs"],

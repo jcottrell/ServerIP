@@ -32,12 +32,12 @@ function process_response (ip_obj) {
 	var el = document.getElementById(hb_id);
 	hov_config = ip_obj;
 	if (ip_obj && ip_obj.my_ip) {
-		if (ip_obj.visible && ( ! el )) {
+		if (ip_obj.visible && (! el)) {
 			document.body.appendChild(hov);
 		} else if ((! ip_obj.visible) && el) {
 			document.body.removeChild(el);
 		}
-		document.getElementById(hb_id).innerText = ip_obj.my_ip;
+		hov.innerText = ip_obj.my_ip;
 	}
 }
 add_hover_box();
