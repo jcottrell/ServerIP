@@ -9,6 +9,7 @@ function set_badge(ip) {
 		bdg = mnems[ip].mnem;
 	}
 	chrome.browserAction.setBadgeText({'text':bdg});
+	ipToCopy = ip;
 }
 
 function tab_changed_now_update (tab_id) {
@@ -19,12 +20,28 @@ function tab_changed_now_update (tab_id) {
 	});
 }
 
+function copyToClipboard( text ){
+    var copyDiv = document.createElement('div');
+    copyDiv.contentEditable = true;
+    document.body.appendChild(copyDiv);
+    copyDiv.innerHTML = text;
+    copyDiv.unselectable = "off";
+    copyDiv.focus();
+    document.execCommand('SelectAll');
+    document.execCommand("Copy", false, null);
+    document.body.removeChild(copyDiv);
+}
+
 // extension button clicked, make sure badge is correct and toggle ip address on page
 chrome.browserAction.onClicked.addListener(function (tab) {
 	chrome.tabs.getSelected(null, function (tab) {
 		tab_changed_now_update(tab.id);
 		chrome.tabs.sendMessage(tab.id, {'toggle':true}, function () {});
 	});
+	sips = JSON.parse(localStorage.getItem('sips')) || {};
+	if (sips.cpip) {
+		copyToClipboard(ipToCopy);
+	}
 });
 
 // response to the content script executed for the page

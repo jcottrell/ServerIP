@@ -22,6 +22,7 @@
 		add_btn = document.getElementById('add_mnem'),
 		rm_btns, rb_i = 0, rb_len,
 		hover_box = document.getElementById('hb'),
+		copy_ip = document.getElementById('cpip'),
 		del_ls_btn = document.getElementById('del_ls');
 
 	function update_obj(name, obj) {
@@ -157,6 +158,17 @@
 			sips.hb = true;
 		} else {
 			sips.hb = false;
+		}
+		update_sips();
+	});
+
+	// set up checkbox to save value of copy_ip
+	copy_ip.checked = !! (sips && sips.cpip);
+	copy_ip.addEventListener('click', function (e) {
+		if (this.checked) {
+			sips.cpip = true;
+		} else {
+			sips.cpip = false;
 		}
 		update_sips();
 	});
