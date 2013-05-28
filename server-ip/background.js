@@ -38,7 +38,10 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 		tab_changed_now_update(tab.id);
 		chrome.tabs.sendMessage(tab.id, {'toggle':true}, function () {});
 	});
-	copyToClipboard(ipToCopy);
+	sips = JSON.parse(localStorage.getItem('sips')) || {};
+	if (sips.cpip) {
+		copyToClipboard(ipToCopy);
+	}
 });
 
 // response to the content script executed for the page
