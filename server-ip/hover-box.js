@@ -1,5 +1,5 @@
-var hov = document.createElement('div'), hov_config = {},
-	hb_id = 'server_ip_sips_hover_box_id';
+var hov = document.createElement('div'), hovConfig = {},
+	hbId = 'server_ip_sips_hover_box_id';
 function add_hover_box() {
 	var hs = hov.style;
 	hs.position = 'fixed';
@@ -15,33 +15,40 @@ function add_hover_box() {
 	hs.lineHeight = '12px';
 	hs.color = '#222';
 	hs.zIndex = 100001; /* above WP admin bar */
-	hov.id = hb_id;
-	hov.dataset.sip_state = 'right';
+	hov.id = hbId;
+	hov.dataset.sipState = 'right';
 
-	hov.addEventListener('mouseover', function (e) {
-		var el = this,
-			sip_right = el.dataset.sip_state === 'right';
+	hov.addEventListener('mouseover', mover);
+}
+function mover (e) {
+	var el = this,
+		sipRight = el.dataset.sipState === 'right';
+	if (! hovConfig.still) {
 		e.preventDefault();
 
-		el.style.left = sip_right ? '10px' : 'inherit';
-		el.style.right = sip_right ? 'inherit' : '10px';
-		el.dataset.sip_state = sip_right ? 'left' : 'right';
-	});
-}
-function process_response (ip_obj) {
-	var el = document.getElementById(hb_id);
-	hov_config = ip_obj;
-	if (ip_obj && ip_obj.my_ip) {
-		if (ip_obj.visible && (! el)) {
-			document.body.appendChild(hov);
-		} else if ((! ip_obj.visible) && el) {
-			document.body.removeChild(el);
-		}
-		hov.innerText = ip_obj.my_ip;
+		el.style.left = sipRight ? '10px' : 'inherit';
+		el.style.right = sipRight ? 'inherit' : '10px';
+		el.dataset.sipState = sipRight ? 'left' : 'right';
 	}
 }
+function process_response (ipObj) {
+	var el = document.getElementById(hbId);
+	hovConfig = ipObj;
+	if (ipObj && ipObj.myIP) {
+		if (ipObj.visible && (! el)) {
+			document.body.appendChild(hov);
+		} else if ((! ipObj.visible) && el) {
+			document.body.removeChild(el);
+		}
+		hov.innerText = ipObj.myIP;
+	}
+}
+
 add_hover_box();
+
+// send message to background.js to load this tab with relevant information
 chrome.extension.sendMessage({'load':true}, process_response);
+// receive message from the background.js from a person clicking on the badge
 chrome.extension.onMessage.addListener(function (request, sender, response_func) {
-	process_response({'visible':! hov_config.visible, 'my_url':hov_config.my_url, 'my_ip':hov_config.my_ip});
+	process_response({'visible':! hovConfig.visible, 'still':hovConfig.still, 'myURL':hovConfig.myURL, 'myIP':hovConfig.myIP});
 });

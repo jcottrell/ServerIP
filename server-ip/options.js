@@ -9,9 +9,9 @@
  *		}
  * }
  * sips structure = {
- *		'config_name0' : value,
- *		'config_name1' : value,
- *		'config_name2' : 'etc'
+ *		'configName0' : value,
+ *		'configName1' : value,
+ *		'configName2' : 'etc'
  * }
  */
 (function () {
@@ -22,6 +22,7 @@
 		add_btn = document.getElementById('add_mnem'),
 		rm_btns, rb_i = 0, rb_len,
 		hover_box = document.getElementById('hb'),
+		hb_still = document.getElementById('hb_still'),
 		del_ls_btn = document.getElementById('del_ls');
 
 	function update_obj(name, obj) {
@@ -153,13 +154,20 @@
 	// set up checkbox to save value of hover_box
 	hover_box.checked = !! (sips && sips.hb);
 	hover_box.addEventListener('click', function (e) {
-		if (this.checked) {
-			sips.hb = true;
-		} else {
-			sips.hb = false;
-		}
+		sips.hb = !! this.checked;
 		update_sips();
 	});
+
+	// set up checkbox to save value of hb_still, whether hb box moves on mouseover
+	if (sips && (undefined === sips.hbStill)) {
+		sips.hbStill = true; // default to true
+		update_sips();
+	}
+	hb_still.checked = (sips && sips.hbStill);
+	hb_still.addEventListener('click', function (e) {
+		sips.hbStill = !! this.checked;
+		update_sips();
+	})
 
 	del_ls_btn.textContent = 'Delete ' + get_ip_number_in_ls() + ' items';
 	del_ls_btn.addEventListener('click', function (e) {
