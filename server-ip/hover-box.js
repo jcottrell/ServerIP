@@ -7,13 +7,13 @@ function add_hover_box() {
 	hs.right = '10px';
 	hs.padding = '4px 6px';
 	hs.border = '1px solid black';
-	hs.backgroundColor = 'rgba(247,85,100,0.75)';
+	hs.backgroundColor = '#ff9b33';
 	hs.webkitBorderRadius = '12px';
-	hs.fontSize = '10px';
+	hs.fontSize = '13px';
 	hs.fontFamily = 'arial';
-	hs.fontWeight = 'normal';
-	hs.lineHeight = '12px';
-	hs.color = '#222';
+	hs.fontWeight = 'bold';
+	hs.lineHeight = '14px';
+	hs.color = '#fff';
 	hs.zIndex = 100001; /* above WP admin bar */
 	hov.id = hbId;
 	hov.dataset.sipState = 'right';
@@ -35,6 +35,9 @@ function process_response (ipObj) {
 	var el = document.getElementById(hbId);
 	hovConfig = ipObj;
 	if (ipObj && ipObj.myIP) {
+		if (ipObj.color) {
+			hov.style.backgroundColor = ipObj.color;
+		}
 		if (ipObj.visible && (! el)) {
 			document.body.appendChild(hov);
 		} else if ((! ipObj.visible) && el) {
@@ -50,5 +53,6 @@ add_hover_box();
 chrome.extension.sendMessage({'load':true}, process_response);
 // receive message from the background.js from a person clicking on the badge
 chrome.extension.onMessage.addListener(function (request, sender, response_func) {
-	process_response({'visible':! hovConfig.visible, 'still':hovConfig.still, 'myURL':hovConfig.myURL, 'myIP':hovConfig.myIP});
+	hovConfig.visible = ! hovConfig.visible;
+	process_response(hovConfig);
 });

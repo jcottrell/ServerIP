@@ -1,14 +1,19 @@
+var sips = JSON.parse(localStorage.getItem('sips')) || {};
+
 function parse_url(l_url) {
 	return l_url.replace(/^(([^:/?#]+):)?(\/\/([^/?#]*)|\/\/\/)?([^?#]*)(\\?[^#]*)?(#.*)?/,'$3').replace('//', '');
 }
 
 function set_badge(ip) {
 	var bdg = (ip) ? ip.substr(ip.lastIndexOf('.') + 1) : '',
+		bdgColor = (sips && sips.color && sips.color.defaultColor ? sips.color.defaultColor : '#ff0000'),
 		mnems = JSON.parse(localStorage.getItem('mnems')) || {};
 	if (mnems[ip]) {
 		bdg = mnems[ip].mnem;
+		bdgColor = mnems[ip].color || bdgColor;
 	}
 	chrome.browserAction.setBadgeText({'text':bdg});
+	chrome.browserAction.setBadgeBackgroundColor({'color':bdgColor});
 }
 
 function tab_changed_now_update (tab_id) {
@@ -47,12 +52,17 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 // response to the content script executed for the page
 chrome.extension.onMessage.addListener(function (request, sender, response_func) {
 	var response = {},
+		myURL = parse_url(sender.tab.url),
+		myIP = localStorage.getItem(myURL),
+		mnems = JSON.parse(localStorage.getItem('mnems')) || {},
+		color = (mnems[myIP] && mnems[myIP].color) ? mnems[myIP].color : (sips.color && sips.color.defaultColor ? sips.color.defaultColor : undefined);
 		sips = JSON.parse(localStorage.getItem('sips')) || {};
 	if (request.hasOwnProperty('load') && request.load) {
 		response.visible = sips.hb;
 		response.still = !! sips.hbStill;
-		response.myURL = parse_url(sender.tab.url);
-		response.myIP = localStorage.getItem(response.myURL);
+		response.color = color;
+		response.myURL = myURL;
+		response.myIP = myIP;
 		response_func(response);
 	}
 });
